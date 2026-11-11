@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Positions</h1>
+
+  <div class="row">
+    {% for position in position_list %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ position.name }}</h5>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-secondary" role="alert">
+          No positions found.
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

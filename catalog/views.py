@@ -26,3 +26,8 @@ class ProjectListView(ListView):
 class DeveloperListView(ListView):
     model = Developer
     template_name = "catalog/developer_list.html"
+
+
+class PositionListView(ListView):
+    model = Position
+    template_name = "catalog/position_list.html"
