@@ -1,0 +1,26 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Projects</h1>
+
+  <div class="row">
+    {% for project in project_list %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <p class="card-text text-muted">{{ project.description|default:"No description" }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-secondary" role="alert">
+          No projects found.
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
