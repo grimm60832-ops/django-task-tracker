@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView
 from django.views.generic import ListView
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from catalog.models import Developer, Project, Task, Position
 
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "catalog/index.html"
 
     def get_context_data(self, **kwargs):
@@ -18,21 +19,21 @@ class IndexView(TemplateView):
         return context
 
 
-class ProjectListView(ListView):
+class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "catalog/project_list.html"
 
 
-class DeveloperListView(ListView):
+class DeveloperListView(LoginRequiredMixin, ListView):
     model = Developer
     template_name = "catalog/developer_list.html"
 
 
-class PositionListView(ListView):
+class PositionListView(LoginRequiredMixin, ListView):
     model = Position
     template_name = "catalog/position_list.html"
 
 
-class TaskListView(ListView):
+class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     template_name = "catalog/task_list.html"
