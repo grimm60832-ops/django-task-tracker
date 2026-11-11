@@ -5,7 +5,8 @@ from catalog.views import (
     DeveloperListView,
     PositionListView,
     ProjectListView,
-    TaskListView
+    TaskListView,
+    RegistrationView
 )
 
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path('tasks/', TaskListView.as_view(), name="tasks"),
     path('login/', LoginView.as_view(template_name="catalog/login.html"), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
+    path('register/', RegistrationView.as_view(), name="register"),
 ]

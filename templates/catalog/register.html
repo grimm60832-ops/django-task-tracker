@@ -1,0 +1,71 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="col-md-5 col-lg-4">
+    <div class="card border-0 shadow-lg rounded-lg">
+      <div class="card-body p-5">
+        <div class="text-center mb-4">
+          <h2 class="font-weight-bold text-dark">Create Account</h2>
+          <p class="text-muted small">Please fill in the details to register</p>
+        </div>
+
+        {% if form.errors %}
+          <div class="alert alert-danger border-0 small py-2 mb-3 text-center">
+            Please correct the errors below.
+          </div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="form-group mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label text-muted small font-weight-bold">USERNAME</label>
+            <input type="text"
+                   name="{{ form.username.name }}"
+                   id="{{ form.username.id_for_label }}"
+                   class="form-control form-control-lg bg-light border-0"
+                   placeholder="Enter username"
+                   required>
+            {% if form.username.errors %}
+              <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="{{ form.password1.id_for_label }}" class="form-label text-muted small font-weight-bold">PASSWORD</label>
+            <input type="password"
+                   name="{{ form.password1.name }}"
+                   id="{{ form.password1.id_for_label }}"
+                   class="form-control form-control-lg bg-light border-0"
+                   placeholder="Enter password"
+                   required>
+            {% if form.password1.errors %}
+              <div class="text-danger small mt-1">{{ form.password1.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="{{ form.password2.id_for_label }}" class="form-label text-muted small font-weight-bold">CONFIRM PASSWORD</label>
+            <input type="password"
+                   name="{{ form.password2.name }}"
+                   id="{{ form.password2.id_for_label }}"
+                   class="form-control form-control-lg bg-light border-0"
+                   placeholder="Confirm password"
+                   required>
+            {% if form.password2.errors %}
+              <div class="text-danger small mt-1">{{ form.password2.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-dark btn-lg btn-block w-100 py-2">Sign Up</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="{% url 'catalog:login' %}" class="small text-muted">Already have an account? Log in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
