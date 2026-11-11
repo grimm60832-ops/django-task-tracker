@@ -1,0 +1,28 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Tasks</h1>
+
+  <div class="row">
+    {% for task in task_list %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ task.name }}</h5>
+            <p class="card-text text-muted">
+              Status: {{ task.status|default:"No status" }}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-secondary" role="alert">
+          No tasks found.
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
