@@ -4,7 +4,41 @@
 <div class="jumbotron">
     <h1 class="display-4">Welcome to Task Tracker!</h1>
     <p class="lead">Manage your projects, tasks, and team efficiently.</p>
-    <hr class="my-4">
-    <p>Use the navigation bar above to switch between sections.</p>
+</div>
+
+<h2 class="mb-3">System Statistics</h2>
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Projects</h5>
+                <p class="card-text display-4">{{ num_projects }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
+                <p class="card-text display-4">{{ num_tasks }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Developers</h5>
+                <p class="card-text display-4">{{ num_developers }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-secondary">
+            <div class="card-body">
+                <h5 class="card-title">Positions</h5>
+                <p class="card-text display-4">{{ num_positions }}</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
