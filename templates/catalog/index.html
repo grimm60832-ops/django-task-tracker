@@ -1,44 +1,62 @@
 {% extends "catalog/base.html" %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="container mt-4">
+  <div class="jumbotron text-center">
     <h1 class="display-4">Welcome to Task Tracker!</h1>
-    <p class="lead">Manage your projects, tasks, and team efficiently.</p>
-</div>
+    <p class="lead" style="font-size: 1.6rem;">Manage your projects, tasks, and team efficiently.</p>
+  </div>
 
-<h2 class="mb-3">System Statistics</h2>
-<div class="row">
+  <h1 class="display-4 font-weight-normal mb-4 text-center" style="font-size: 2.2rem; margin-top: 70px;">System Statistics</h1>
+
+  <div class="row">
+    <!-- Projects Card -->
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-primary rounded-lg">
-            <div class="card-body">
-                <h5 class="card-title">Projects</h5>
-                <p class="card-text display-4">{{ num_projects }}</p>
-            </div>
+      <a href="{% url 'catalog:projects' %}" class="text-decoration-none">
+        <div class="card text-white bg-primary shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Projects</h5>
+            <p class="card-text display-4">{{ num_projects }}</p>
+          </div>
         </div>
+      </a>
     </div>
+
+    <!-- Tasks Card -->
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-success rounded-lg">
-            <div class="card-body">
-                <h5 class="card-title">Tasks</h5>
-                <p class="card-text display-4">{{ num_tasks }}</p>
-            </div>
+      <a href="{% url 'catalog:tasks' %}" class="text-decoration-none">
+        <div class="card text-white bg-success shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Tasks</h5>
+            <p class="card-text display-4">{{ num_tasks }}</p>
+          </div>
         </div>
+      </a>
     </div>
+
+    <!-- Developers Card -->
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-info rounded-lg">
-            <div class="card-body">
-                <h5 class="card-title">Developers</h5>
-                <p class="card-text display-4">{{ num_developers }}</p>
-            </div>
+      <a href="{% url 'catalog:developers' %}" class="text-decoration-none">
+        <div class="card text-white bg-info shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Developers</h5>
+            <p class="card-text display-4">{{ num_developers }}</p>
+          </div>
         </div>
+      </a>
     </div>
+
+    <!-- Positions Card -->
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-secondary rounded-lg">
-            <div class="card-body">
-                <h5 class="card-title">Positions</h5>
-                <p class="card-text display-4">{{ num_positions }}</p>
-            </div>
+      <a href="{% url 'catalog:positions' %}" class="text-decoration-none">
+        <div class="card text-white bg-secondary shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Positions</h5>
+            <p class="card-text display-4">{{ num_positions }}</p>
+          </div>
         </div>
+      </a>
     </div>
+  </div>
 </div>
 {% endblock %}
