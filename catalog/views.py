@@ -2,8 +2,8 @@ from django.views.generic import TemplateView, CreateView
 from django.views.generic import ListView
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from catalog.forms import RegistrationForm
 
 
 from catalog.models import Developer, Project, Task, Position
@@ -43,6 +43,6 @@ class TaskListView(LoginRequiredMixin, ListView):
 
 
 class RegistrationView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = RegistrationForm
     template_name = "catalog/register.html"
     success_url = reverse_lazy("catalog:login")
