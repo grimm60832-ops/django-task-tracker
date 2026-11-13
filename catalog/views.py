@@ -1,4 +1,10 @@
-from django.views.generic import TemplateView, ListView, UpdateView
+from django.views.generic import (
+    TemplateView,
+    ListView,
+    UpdateView,
+    CreateView,
+    DeleteView,
+)
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as AuthLogoutView
@@ -23,9 +29,45 @@ class IndexView(TemplateView):
         return context
 
 
+class ProjectCreateView(LoginRequiredMixin, CreateView):
+    model = Project
+    fields = ["name", "description"]
+    template_name = "catalog/project_form.html"
+    success_url = reverse_lazy("catalog:projects")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully created a new project.")
+        return super().form_valid(form)
+
+
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+    model = Project
+    fields = ["name", "description"]
+    template_name = "catalog/project_form.html"
+    success_url = reverse_lazy("catalog:projects")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully updated your project.")
+        return super().form_valid(form)
+
+
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+    model = Project
+    template_name = "catalog/project_confirm_delete.html"
+    success_url = reverse_lazy("catalog:projects")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Project successfully deleted.")
+        return super().delete(request, *args, **kwargs)
+
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "catalog/project_list.html"
+
+
+class ProjectDetailView(LoginRequiredMixin, DeleteView):
+    model = Project
+    template_name = "catalog/project_delete.html"
 
 
 class DeveloperListView(LoginRequiredMixin, ListView):

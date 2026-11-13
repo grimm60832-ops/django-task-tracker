@@ -1,0 +1,17 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-4 text-center">{% if form.instance.pk %}Edit Project{% else %}Create Project{% endif %}</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-dark btn-block">Save</button>
+      </form>
+      <a href="{% url 'catalog:projects' %}" class="btn btn-link btn-block mt-2">Cancel</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

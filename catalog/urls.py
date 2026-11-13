@@ -8,7 +8,11 @@ from catalog.views import (
     TaskListView,
     RegistrationView,
     DeveloperUpdateView,
-    CustomLogoutView
+    CustomLogoutView,
+    ProjectCreateView,
+    ProjectUpdateView,
+    ProjectDeleteView,
+    ProjectDetailView,
 )
 
 
@@ -23,5 +27,9 @@ urlpatterns = (
     path('login/', LoginView.as_view(template_name="catalog/login.html"), name="login"),
     path('logout/', CustomLogoutView.as_view(), name="logout"),
     path('register/', RegistrationView.as_view(), name="register"),
-    path("profile/", DeveloperUpdateView.as_view(), name="dev_profile"),
+    path('profile/', DeveloperUpdateView.as_view(), name="dev_profile"),
+    path('project/create/', ProjectCreateView.as_view(), name="project-create"),
+    path('project/update/<int:pk>/', ProjectUpdateView.as_view(), name="project-update"),
+    path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name="project-delete"),
+    path('project/detail/<int:pk>/', ProjectDetailView.as_view(), name="project-detail"),
 )
