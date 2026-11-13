@@ -10,7 +10,7 @@ from catalog.forms import RegistrationForm, DeveloperUpdateForm
 from catalog.models import Developer, Project, Task, Position
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
+class IndexView(TemplateView):
     template_name = "catalog/index.html"
 
     def get_context_data(self, **kwargs):
