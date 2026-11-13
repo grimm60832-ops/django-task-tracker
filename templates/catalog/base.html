@@ -19,10 +19,14 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:tasks' %}">Tasks</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:developers' %}">Developers</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:positions' %}">Positions</a></li>
-        <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:dev_profile' %}">
             <i class="bi bi-person-circle"></i> Profile
           </a>
+        <li class="nav-item d-flex align-items-center ml-2">
+          <form action="{% url 'catalog:logout' %}" method="post" class="m-0 p-0">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-link p-0" style="line-height: inherit;">Logout</button>
+          </form>
         </li>
       </ul>
     </div>
