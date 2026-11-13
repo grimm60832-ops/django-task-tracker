@@ -3,7 +3,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
     CreateView,
-    DeleteView,
+    DeleteView, DetailView,
 )
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -84,6 +84,43 @@ class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     template_name = "catalog/task_list.html"
 
+
+class TaskCreateView(LoginRequiredMixin, CreateView):
+    model = Task
+    fields = ["name", "description", "deadline", "is_completed", "priority"]
+    template_name = "catalog/task_form.html"
+    success_url = reverse_lazy("catalog:tasks")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully created a new task.")
+        return super().form_valid(form)
+
+
+class TaskDetailView(LoginRequiredMixin, DetailView):
+    model = Task
+    template_name = "catalog/task_detail.html"
+
+
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
+    model = Task
+    fields = ["name", "description", "deadline", "is_completed", "priority"]
+    template_name = "catalog/task_form.html"
+    success_url = reverse_lazy("catalog:tasks")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully updated your task.")
+        return super().form_valid(form)
+
+
+class TaskDeleteView(LoginRequiredMixin, DeleteView):
+    model = Task
+    template_name = "catalog/task_confirm_delete.html"
+    success_url = reverse_lazy("catalog:tasks")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Successfully deleted your task.")
+        return super().delete(request, *args, **kwargs)
+    
 
 class RegistrationView(generic.CreateView):
     form_class = RegistrationForm
