@@ -3,9 +3,17 @@ from django.contrib.auth.views import LoginView
 from catalog.views import (
     IndexView,
     DeveloperListView,
+    DeveloperCreateView,
+    DeveloperUpdateView,
+    DeveloperDeleteView,
+    DeveloperDetailView,
     PositionListView,
     ProjectListView,
     TaskListView,
+    TaskCreateView,
+    TaskDetailView,
+    TaskUpdateView,
+    TaskDeleteView,
     RegistrationView,
     DeveloperUpdateView,
     CustomLogoutView,
@@ -13,10 +21,8 @@ from catalog.views import (
     ProjectUpdateView,
     ProjectDeleteView,
     ProjectDetailView,
-    TaskCreateView,
-    TaskDetailView,
-    TaskUpdateView,
-    TaskDeleteView,
+
+
 )
 
 
@@ -30,6 +36,10 @@ urlpatterns = (
     path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name="project-delete"),
     path('project/detail/<int:pk>/', ProjectDetailView.as_view(), name="project-detail"),
     path('developers/', DeveloperListView.as_view(), name="developers"),
+    path('developer/create/', DeveloperCreateView.as_view(), name="developer-create"),
+    path('developers/<int:pk>/', DeveloperDetailView.as_view(), name='developer-detail'),
+    path('developers/<int:pk>/update/', DeveloperUpdateView.as_view(), name='developer-update'),
+    path('developers/<int:pk>/delete/', DeveloperDeleteView.as_view(), name='developer-delete'),
     path('positions/', PositionListView.as_view(), name="positions"),
     path('tasks/', TaskListView.as_view(), name="tasks"),
     path('task/create/', TaskCreateView.as_view(), name="task-create"),

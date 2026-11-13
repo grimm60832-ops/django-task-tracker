@@ -75,6 +75,40 @@ class DeveloperListView(LoginRequiredMixin, ListView):
     template_name = "catalog/developer_list.html"
 
 
+class DeveloperCreateView(LoginRequiredMixin, CreateView):
+    model = Developer
+    fields = ["username", "first_name", "last_name", "position"]
+    template_name = "catalog/developer_form.html"
+    success_url = reverse_lazy("catalog:developers")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully created a new developer.")
+        return super().form_valid(form)
+
+class DeveloperDetailView(LoginRequiredMixin, DetailView):
+    model = Developer
+    template_name = "catalog/developer_detail.html"
+
+class DeveloperUpdateView(LoginRequiredMixin, UpdateView):
+    model = Developer
+    fields = ["username", "first_name", "last_name", "position"]
+    success_url = reverse_lazy("catalog:developers")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Successfully updated your developer.")
+        return super().form_valid(form)
+
+
+class DeveloperDeleteView(LoginRequiredMixin, DeleteView):
+    model = Developer
+    template_name = "catalog/developer_confirm_delete.html"
+    success_url = reverse_lazy("catalog:developers")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Developer successfully deleted.")
+        return super().delete(request, *args, **kwargs)
+
+
 class PositionListView(LoginRequiredMixin, ListView):
     model = Position
     template_name = "catalog/position_list.html"
@@ -120,7 +154,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Successfully deleted your task.")
         return super().delete(request, *args, **kwargs)
-    
+
 
 class RegistrationView(generic.CreateView):
     form_class = RegistrationForm

@@ -1,28 +1,24 @@
 {% extends "catalog/base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-  <h1 class="mb-4">Developers</h1>
-
-  <div class="row">
-    {% for developer in developer_list %}
-      <div class="col-md-4 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ developer.first_name }} {{ developer.last_name }}</h5>
-            <p class="card-text text-muted">
-              Position: {{ developer.position|default:"No position" }}
-            </p>
-          </div>
-        </div>
-      </div>
-    {% empty %}
-      <div class="col-12">
-        <div class="alert alert-secondary" role="alert">
-          No developers found.
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Developers</h1>
+  <a href="{% url 'catalog:developer-create' %}" class="btn btn-dark">Add Developer</a>
 </div>
+
+<ul class="list-group">
+  {% for developer in developer_list %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{% url 'catalog:developer-detail' developer.pk %}">
+        {{ developer.first_name }} {{ developer.last_name }} ({{ developer.username }})
+      </a>
+      <div>
+        <a href="{% url 'catalog:developer-update' developer.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a href="{% url 'catalog:developer-delete' developer.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+      </div>
+    </li>
+  {% empty %}
+    <p class="text-muted">No developers found.</p>
+  {% endfor %}
+</ul>
 {% endblock %}
