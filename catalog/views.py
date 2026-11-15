@@ -1,3 +1,4 @@
+from django.db.models.sql import query
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -117,11 +118,34 @@ class PositionListView(LoginRequiredMixin, ListView):
 class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     template_name = "catalog/task_list.html"
+    context_object_name = "task_list"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("q", "").strip()
+        completed_filter = self.request.GET.get("completed", "").strip()
+
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+
+        if completed_filter == "true":
+            queryset = queryset.filter(is_completed=True)
+        elif completed_filter == "false":
+            queryset = queryset.filter(is_completed=False)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("q", "")
+        context["selected_completed"] = self.request.GET.get("completed", "")
+        return context
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ["name", "description", "deadline", "is_completed", "priority"]
+    fields = ["name", "description", "deadline", "is_completed", "priority", "project", "assignees"]
     template_name = "catalog/task_form.html"
     success_url = reverse_lazy("catalog:tasks")
 
@@ -137,7 +161,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = ["name", "description", "deadline", "is_completed", "priority"]
+    fields = ["name", "description", "deadline", "is_completed", "priority", "project", "assignees"]
     template_name = "catalog/task_form.html"
     success_url = reverse_lazy("catalog:tasks")
 
