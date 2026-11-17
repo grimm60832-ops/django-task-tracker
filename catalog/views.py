@@ -67,7 +67,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
 
 class ProjectDetailView(LoginRequiredMixin, DeleteView):
     model = Project
-    template_name = "catalog/project_delete.html"
+    template_name = "catalog/project_detail.html"
 
 
 class DeveloperListView(LoginRequiredMixin, ListView):
