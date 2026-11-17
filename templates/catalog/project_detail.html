@@ -14,7 +14,7 @@
 
 <div class="card shadow-sm p-4">
   <h3>Tasks in this project</h3>
-  <!-- Если у модели Task есть ForeignKey на Project сrelated_name="tasks" -->
+  <!-- Task Project  -->
   {% if project.tasks.all %}
     <ul class="list-group list-group-flush mt-3">
       {% for task in project.tasks.all %}

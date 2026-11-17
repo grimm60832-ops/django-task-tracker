@@ -2,61 +2,59 @@
 
 {% block content %}
 <div class="container mt-4">
-  <div class="jumbotron text-center">
+  <div class="jumbotron text-center mb-4" style="background-color: rgba(220, 224, 230, 0.75); backdrop-filter: blur(5px);">
     <h1 class="display-4">Welcome to Task Tracker!</h1>
     <p class="lead" style="font-size: 1.6rem;">Manage your projects, tasks, and team efficiently.</p>
   </div>
 
-  <h1 class="display-4 font-weight-normal mb-4 text-center" style="font-size: 2.2rem; margin-top: 70px;">System Statistics</h1>
+  <h3 class="text-center mb-5 text-dark font-weight-normal" style="margin-top: 30px;">System Statistics</h3>
 
-  <div class="row">
-    <!-- Projects Card -->
-    <div class="col-md-3 mb-3">
+  <div class="row justify-content-center">
+
+    <!-- Projects -->
+    <div class="col-auto mb-3">
       <a href="{% url 'catalog:projects' %}" class="text-decoration-none">
-        <div class="card text-white bg-primary shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">Projects</h5>
-            <p class="card-text display-4">{{ num_projects }}</p>
-          </div>
+        <div class="rounded-circle bg-primary text-white d-flex flex-column align-items-center justify-content-center shadow"
+             style="width: 230px; height: 230px;">
+          <span class="text-white mb-1" style="font-size: 1.6rem; font-weight: 400;">Projects</span>
+          <span class="text-white" style="font-size: 1.8rem; font-weight: 400;">{{ num_projects }}</span>
         </div>
       </a>
     </div>
 
-    <!-- Tasks Card -->
-    <div class="col-md-3 mb-3">
+    <!-- Tasks -->
+    <div class="col-auto mb-3">
       <a href="{% url 'catalog:tasks' %}" class="text-decoration-none">
-        <div class="card text-white bg-success shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">Tasks</h5>
-            <p class="card-text display-4">{{ num_tasks }}</p>
-          </div>
+        <div class="rounded-circle bg-success text-white d-flex flex-column align-items-center justify-content-center shadow"
+             style="width: 230px; height: 230px;">
+          <span class="text-white mb-1" style="font-size: 1.6rem; font-weight: 400;">Tasks</span>
+          <span class="text-white" style="font-size: 1.8rem; font-weight: 400;">{{ num_tasks }}</span>
         </div>
       </a>
     </div>
 
-    <!-- Developers Card -->
-    <div class="col-md-3 mb-3">
+    <!-- Developers -->
+    <div class="col-auto mb-3">
       <a href="{% url 'catalog:developers' %}" class="text-decoration-none">
-        <div class="card text-white bg-info shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">Developers</h5>
-            <p class="card-text display-4">{{ num_developers }}</p>
-          </div>
+        <div class="rounded-circle bg-info text-white d-flex flex-column align-items-center justify-content-center shadow"
+             style="width: 230px; height: 230px;">
+          <span class="text-white mb-1" style="font-size: 1.6rem; font-weight: 400;">Developers</span>
+          <span class="text-white" style="font-size: 1.8rem; font-weight: 400;">{{ num_developers }}</span>
         </div>
       </a>
     </div>
 
-    <!-- Positions Card -->
-    <div class="col-md-3 mb-3">
+    <!-- Positions -->
+    <div class="col-auto mb-3">
       <a href="{% url 'catalog:positions' %}" class="text-decoration-none">
-        <div class="card text-white bg-secondary shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">Positions</h5>
-            <p class="card-text display-4">{{ num_positions }}</p>
-          </div>
+        <div class="rounded-circle bg-secondary text-white d-flex flex-column align-items-center justify-content-center shadow"
+             style="width: 230px; height: 230px;">
+          <span class="text-white mb-1" style="font-size: 1.6rem; font-weight: 400;">Positions</span>
+          <span class="text-white" style="font-size: 1.8rem; font-weight: 400;">{{ num_positions }}</span>
         </div>
       </a>
     </div>
+
   </div>
 </div>
 {% endblock %}

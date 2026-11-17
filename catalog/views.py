@@ -22,7 +22,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-
         context["num_developers"] = Developer.objects.count()
         context["num_projects"] = Project.objects.count()
         context["num_tasks"] = Task.objects.count()
