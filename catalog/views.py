@@ -20,7 +20,13 @@ from catalog.forms import (
     TaskCommentForm,
     TaskSearchForm,
 )
-from catalog.models import Developer, Position, Project, Task
+from catalog.models import(
+    Developer,
+    Position,
+    Project,
+    Task,
+    TaskComment
+)
 
 User = get_user_model()
 
@@ -250,6 +256,20 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Successfully deleted your task.")
         return super().delete(request, *args, **kwargs)
+
+
+class TaskCommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = TaskComment
+
+    def get_success_url(self):
+        return reverse_lazy("catalog:task-detail", kwargs={"pk": self.object.task.pk})
+
+    def dispatch(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.author != request.user and not request.user.is_staff:
+            messages.error(request, "You can only delete your own comments.")
+            return redirect("catalog:task-detail", pk=comment.task.pk)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class RegistrationView(generic.CreateView):

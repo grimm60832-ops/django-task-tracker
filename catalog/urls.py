@@ -21,7 +21,7 @@ from catalog.views import (
     ProjectUpdateView,
     ProjectDeleteView,
     ProjectDetailView,
-
+    TaskCommentDeleteView,
 
 )
 
@@ -46,6 +46,7 @@ urlpatterns = (
     path('task/update/<int:pk>/', TaskUpdateView.as_view(), name="task-update"),
     path('task/delete/<int:pk>/', TaskDeleteView.as_view(), name="task-delete"),
     path('task/detail/<int:pk>/', TaskDetailView.as_view(), name="task-detail"),
+    path("task-comment/<int:pk>/delete/", TaskCommentDeleteView.as_view(), name="task-comment-delete"),
     path('login/', LoginView.as_view(template_name="catalog/login.html"), name="login"),
     path('logout/', CustomLogoutView.as_view(), name="logout"),
     path('register/', RegistrationView.as_view(), name="register"),
