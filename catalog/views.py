@@ -1,4 +1,6 @@
 from django.db.models.sql import query
+from django.shortcuts import redirect
+from django.tasks import task
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -11,8 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as AuthLogoutView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from catalog.forms import RegistrationForm, DeveloperUpdateForm
-
+from catalog.forms import RegistrationForm, DeveloperUpdateForm, TaskCommentForm
 
 from catalog.models import Developer, Project, Task, Position
 
@@ -177,6 +178,25 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = "catalog/task_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = TaskCommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = TaskCommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.task = self.object
+            comment.author = request.user
+            comment.save()
+            return redirect("catalog:task-detail", pk=self.object.pk)
+
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
 
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):

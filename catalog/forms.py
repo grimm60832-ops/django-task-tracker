@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django import forms
 
-from catalog.models import Developer
+from catalog.models import Developer, TaskComment
 
 User = get_user_model()
 
@@ -17,3 +17,9 @@ class DeveloperUpdateForm(forms.ModelForm):
     class Meta:
         model = Developer
         fields = ("username", "first_name", "last_name", "position", "email",)
+
+
+class TaskCommentForm(forms.ModelForm):
+    class Meta:
+        model = TaskComment
+        fields = ("comment",)

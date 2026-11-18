@@ -14,4 +14,35 @@
     <a href="{% url 'catalog:tasks' %}" class="btn btn-secondary btn-sm">Back to List</a>
   </div>
 </div>
+
+<!-- Section -->
+<div class="card shadow-sm p-4 mb-4">
+  <h3>Comments</h3>
+
+  <hr>
+
+  <!-- List comments -->
+  <div class="comments-list mb-4">
+    {% for comment in task.comments.all %}
+      <div class="border-bottom pb-3 mb-3">
+        <div class="d-flex justify-content-between">
+          <strong>{{ comment.author }}</strong>
+          <small class="text-muted">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+        </div>
+        <p class="mt-2 mb-0">{{ comment.comment }}</p>
+      </div>
+    {% empty %}
+      <p class="text-muted">No comments yet. Be the first to leave one!</p>
+    {% endfor %}
+  </div>
+
+  <!-- Form comments -->
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+      {{ form.as_p }}
+    </div>
+    <button type="submit" class="btn btn-secondary btn-sm">Add Comment</button>
+  </form>
+</div>
 {% endblock %}
