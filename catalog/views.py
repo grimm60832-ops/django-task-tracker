@@ -193,17 +193,30 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = TaskCommentForm()
+        context["status_choices"] = Task.StatusChoices.choices
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = TaskCommentForm(request.POST)
 
+        new_status = request.POST.get("new_status")
+        if new_status in dict(Task.StatusChoices.choices):
+            self.object.status = new_status
+            if new_status == Task.StatusChoices.DONE:
+                self.object.is_completed = True
+            else:
+                self.object.is_completed = False
+            self.object.save()
+            messages.success(request, "Task status successfully updated.")
+            return redirect("catalog:task-detail", pk=self.object.pk)
+
+        form = TaskCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.task = self.object
             comment.author = request.user
             comment.save()
+            messages.success(request, "Comment added successfully.")
             return redirect("catalog:task-detail", pk=self.object.pk)
 
         context = self.get_context_data(form=form)
