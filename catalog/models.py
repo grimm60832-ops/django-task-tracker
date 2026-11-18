@@ -67,3 +67,16 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.name} [{self.priority}]"
+
+
+class TaskComment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name="comments")
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.author} [{self.task}]"
