@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LogoutView as AuthLogoutView
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -51,24 +51,39 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         messages.success(self.request, "Successfully created a new project.")
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Project
     fields = ["name", "description"]
     template_name = "catalog/project_form.html"
     success_url = reverse_lazy("catalog:projects")
+
+    def test_func(self):
+        project = self.get_object()
+        if self.request.user == project.author or self.request.user.is_staff:
+            return True
+        else:
+            return False
 
     def form_valid(self, form):
         messages.success(self.request, "Successfully updated your project.")
         return super().form_valid(form)
 
 
-class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Project
     template_name = "catalog/project_confirm_delete.html"
     success_url = reverse_lazy("catalog:projects")
+
+    def test_func(self):
+        project = self.get_object()
+        if self.request.user == project.author or self.request.user.is_staff:
+            return True
+        else:
+            return False
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Project successfully deleted.")
@@ -189,6 +204,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         messages.success(self.request, "Successfully created a new task.")
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 
@@ -207,6 +223,16 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 
         new_status = request.POST.get("new_status")
         if new_status in dict(Task.StatusChoices.choices):
+            is_allowed = (
+                    request.user == self.object.creator
+                    or request.user in self.object.assignees.all()
+                    or request.user.is_staff
+            )
+
+            if not is_allowed:
+                messages.error(request, "You do not have permission to change this task's status.")
+                return redirect("catalog:task-detail", pk=self.object.pk)
+
             self.object.status = new_status
             if new_status == Task.StatusChoices.DONE:
                 self.object.is_completed = True
@@ -229,7 +255,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
         return self.render_to_response(context)
 
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Task
     fields = [
         "name",
@@ -243,15 +269,29 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "catalog/task_form.html"
     success_url = reverse_lazy("catalog:tasks")
 
+    def test_func(self):
+        task = self.get_object()
+        if self.request.user == task.creator or self.request.user.is_staff:
+            return True
+        else:
+            return False
+
     def form_valid(self, form):
         messages.success(self.request, "Successfully updated your task.")
         return super().form_valid(form)
 
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Task
     template_name = "catalog/task_confirm_delete.html"
     success_url = reverse_lazy("catalog:tasks")
+
+    def test_func(self):
+        task = self.get_object()
+        if self.request.user == task.creator or self.request.user.is_staff:
+            return True
+        else:
+            return False
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Successfully deleted your task.")
