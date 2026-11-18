@@ -6,22 +6,16 @@
   <a href="{% url 'catalog:task-create' %}" class="btn btn-dark">Create Task</a>
 </div>
 
-<!-- Form search -->
 <form method="get" class="card shadow-sm p-3 mb-4 border-0 bg-light">
   <div class="row g-3 align-items-center">
-    <div class="col-md-7 mb-2 mb-md-0">
-      <input type="text"
-             name="q"
-             value="{{ search_query }}"
-             class="form-control"
-             placeholder="Search tasks by name...">
+    <div class="col-md-4 mb-2 mb-md-0">
+      {{ search_form.name }}
     </div>
     <div class="col-md-3 mb-2 mb-md-0">
-      <select name="completed" class="form-control">
-        <option value="">All Tasks</option>
-        <option value="false" {% if selected_completed == "false" %}selected{% endif %}>Active</option>
-        <option value="true" {% if selected_completed == "true" %}selected{% endif %}>Completed</option>
-      </select>
+      {{ search_form.status }}
+    </div>
+    <div class="col-md-3 mb-2 mb-md-0">
+      {{ search_form.priority }}
     </div>
     <div class="col-md-2">
       <button type="submit" class="btn btn-dark btn-block w-100">Filter</button>
@@ -29,7 +23,6 @@
   </div>
 </form>
 
-<!--  -->
 <ul class="list-group shadow-sm">
   {% for task in task_list %}
     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
@@ -38,13 +31,19 @@
           {{ task.name }}
         </a>
 
-        <div>
+        <div class="mb-1">
           <span class="badge badge-info">Priority: {{ task.get_priority_display|default:task.priority }}</span>
-          {% if task.is_completed %}
-            <span class="badge badge-success ml-1">Completed</span>
-          {% else %}
-            <span class="badge badge-warning ml-1">Active</span>
-          {% endif %}
+          <span class="badge badge-secondary ml-1">Status: {{ task.get_status_display|default:task.status }}</span>
+        </div>
+
+        <div>
+          <small class="text-muted">Assignees:
+            {% for dev in task.assignees.all %}
+              <span class="badge badge-dark ml-1">{{ dev.username }}</span>
+            {% empty %}
+              <span class="text-muted ml-1">No assignees</span>
+            {% endfor %}
+          </small>
         </div>
 
         {% if task.project %}
