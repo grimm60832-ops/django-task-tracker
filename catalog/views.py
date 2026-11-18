@@ -110,6 +110,23 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = Project
     template_name = "catalog/project_detail.html"
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        new_status = request.POST.get("new_status")
+        if new_status in dict(Project.StatusChoices.choices):
+
+            if request.user != self.object.author and not request.user.is_staff:
+                messages.error(request, "You do not have permission to change this project's status.")
+                return redirect("catalog:project-detail", pk=self.object.pk)
+
+            self.object.status = new_status
+            self.object.save()
+            messages.success(request, "Project status successfully updated.")
+            return redirect("catalog:project-detail", pk=self.object.pk)
+
+        return redirect("catalog:project-detail", pk=self.object.pk)
+
 
 class DeveloperListView(LoginRequiredMixin, ListView):
     model = Developer

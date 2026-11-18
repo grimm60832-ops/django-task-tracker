@@ -33,9 +33,19 @@ class Developer(AbstractUser):
 
 
 class Project(models.Model):
+    class StatusChoices(models.TextChoices):
+        ACTIVE = "active", "Active"
+        ON_HOLD = "on_hold", "On Hold"
+        COMPLETED = "completed", "Completed"
+
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE, related_name="projects")
+    status = models.CharField(
+        max_length=20,
+        choices=StatusChoices.choices,
+        default=StatusChoices.ACTIVE,
+    )
 
     class Meta:
         ordering = ["name"]

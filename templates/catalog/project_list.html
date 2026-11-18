@@ -18,7 +18,10 @@
 <ul class="list-group mb-4">
   {% for project in project_list %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <a href="{% url 'catalog:project-detail' project.pk %}">{{ project.name }}</a>
+      <div>
+        <a href="{% url 'catalog:project-detail' project.pk %}" class="font-weight-bold text-dark text-decoration-none mr-2">{{ project.name }}</a>
+        <span class="badge badge-secondary">{{ project.get_status_display }}</span>
+      </div>
       <div>
         {% if project.author == request.user or request.user.is_staff %}
           <a href="{% url 'catalog:project-update' project.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
