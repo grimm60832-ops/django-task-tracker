@@ -13,4 +13,3 @@ It allows users to manage projects, tasks, and team assignments efficiently.
 ## Tech Stack
 - **Backend:** Python, Django 6.1.3, SQLite / PostgreSQL
 - **Frontend/UI:** Bootstrap 4, Django Crispy Forms
-- **Testing:** Django TestCase
