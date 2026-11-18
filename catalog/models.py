@@ -48,6 +48,11 @@ class Task(models.Model):
         HIGH = "high", "High"
         URGENT = "urgent", "Urgent"
 
+    class StatusChoices(models.TextChoices):
+        TO_DO = "todo", "To Do"
+        IN_PROGRESS = "in_progress", "In Progress"
+        DONE = "done", "Done"
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
@@ -56,6 +61,11 @@ class Task(models.Model):
         max_length=50,
         choices=PriorityChoices.choices,
         default=PriorityChoices.MEDIUM,
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=StatusChoices.choices,
+        default=StatusChoices.TO_DO,
     )
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="tasks"
