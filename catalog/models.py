@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from django_task_tracker import settings
+
 
 class Position(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -33,6 +35,7 @@ class Developer(AbstractUser):
 class Project(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE, related_name="projects")
 
     class Meta:
         ordering = ["name"]
@@ -54,6 +57,7 @@ class Task(models.Model):
         DONE = "done", "Done"
 
     name = models.CharField(max_length=255)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
