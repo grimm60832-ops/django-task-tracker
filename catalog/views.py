@@ -63,6 +63,23 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "catalog/project_list.html"
+    context_object_name = "project_list"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset_p = super().get_queryset()
+        search_query = self.request.GET.get("q", "").strip()
+        completed_filter = self.request.GET.get("completed", "").strip()
+
+        if search_query:
+            queryset_p = queryset_p.filter(name__icontains=search_query)
+
+        if completed_filter == "true":
+            queryset_p = queryset_p.filter(is_completed=True)
+        elif completed_filter == "false":
+            queryset_p = queryset_p.filter(is_completed=False)
+
+        return queryset_p
 
 
 class ProjectDetailView(LoginRequiredMixin, DeleteView):
@@ -91,8 +108,12 @@ class DeveloperDetailView(LoginRequiredMixin, DetailView):
 
 class DeveloperUpdateView(LoginRequiredMixin, UpdateView):
     model = Developer
-    fields = ["username", "first_name", "last_name", "position"]
+    template_name = "catalog/dev_profile.html"
+    form_class =  DeveloperUpdateForm
     success_url = reverse_lazy("catalog:developers")
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def form_valid(self, form):
         messages.success(self.request, "Successfully updated your developer.")
@@ -183,19 +204,6 @@ class RegistrationView(generic.CreateView):
     form_class = RegistrationForm
     template_name = "catalog/register.html"
     success_url = reverse_lazy("catalog:login")
-
-
-class DeveloperUpdateView(LoginRequiredMixin, UpdateView):
-    form_class = DeveloperUpdateForm
-    template_name = "catalog/dev_profile.html"
-    success_url = reverse_lazy("catalog:developers")
-
-    def get_object(self, queryset=None):
-        return self.request.user
-
-    def form_valid(self, form):
-        messages.success(self.request, "Successfully updated your developer profile.")
-        return super().form_valid(form)
 
 
 class CustomLogoutView(LoginRequiredMixin, AuthLogoutView):
