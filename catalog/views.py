@@ -1,21 +1,28 @@
-from django.db.models.sql import query
-from django.shortcuts import redirect
-from django.tasks import task
-from django.views.generic import (
-    TemplateView,
-    ListView,
-    UpdateView,
-    CreateView,
-    DeleteView, DetailView,
-)
-from django.views import generic
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as AuthLogoutView
-from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from catalog.forms import RegistrationForm, DeveloperUpdateForm, TaskCommentForm
+from django.views import generic
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 
-from catalog.models import Developer, Project, Task, Position
+from catalog.forms import (
+    DeveloperUpdateForm,
+    RegistrationForm,
+    TaskCommentForm,
+    TaskSearchForm,
+)
+from catalog.models import Developer, Position, Project, Task
+
+User = get_user_model()
 
 
 class IndexView(TemplateView):
@@ -61,6 +68,7 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, "Project successfully deleted.")
         return super().delete(request, *args, **kwargs)
 
+
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "catalog/project_list.html"
@@ -70,20 +78,14 @@ class ProjectListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset_p = super().get_queryset()
         search_query = self.request.GET.get("q", "").strip()
-        completed_filter = self.request.GET.get("completed", "").strip()
 
         if search_query:
             queryset_p = queryset_p.filter(name__icontains=search_query)
 
-        if completed_filter == "true":
-            queryset_p = queryset_p.filter(is_completed=True)
-        elif completed_filter == "false":
-            queryset_p = queryset_p.filter(is_completed=False)
-
         return queryset_p
 
 
-class ProjectDetailView(LoginRequiredMixin, DeleteView):
+class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = Project
     template_name = "catalog/project_detail.html"
 
@@ -103,14 +105,16 @@ class DeveloperCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, "Successfully created a new developer.")
         return super().form_valid(form)
 
+
 class DeveloperDetailView(LoginRequiredMixin, DetailView):
     model = Developer
     template_name = "catalog/developer_detail.html"
 
+
 class DeveloperUpdateView(LoginRequiredMixin, UpdateView):
     model = Developer
     template_name = "catalog/dev_profile.html"
-    form_class =  DeveloperUpdateForm
+    form_class = DeveloperUpdateForm
     success_url = reverse_lazy("catalog:developers")
 
     def get_object(self, queryset=None):
@@ -144,29 +148,36 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get("q", "").strip()
-        completed_filter = self.request.GET.get("completed", "").strip()
+        name = self.request.GET.get("name")
+        status = self.request.GET.get("status")
+        priority = self.request.GET.get("priority")
 
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-
-        if completed_filter == "true":
-            queryset = queryset.filter(is_completed=True)
-        elif completed_filter == "false":
-            queryset = queryset.filter(is_completed=False)
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        if status:
+            queryset = queryset.filter(status=status)
+        if priority:
+            queryset = queryset.filter(priority=priority)
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["search_query"] = self.request.GET.get("q", "")
-        context["selected_completed"] = self.request.GET.get("completed", "")
+        context["search_form"] = TaskSearchForm(self.request.GET)
         return context
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ["name", "description", "deadline", "is_completed", "priority", "project", "assignees"]
+    fields = [
+        "name",
+        "description",
+        "deadline",
+        "is_completed",
+        "priority",
+        "project",
+        "assignees",
+    ]
     template_name = "catalog/task_form.html"
     success_url = reverse_lazy("catalog:tasks")
 
@@ -201,7 +212,15 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = ["name", "description", "deadline", "is_completed", "priority", "project", "assignees"]
+    fields = [
+        "name",
+        "description",
+        "deadline",
+        "is_completed",
+        "priority",
+        "project",
+        "assignees",
+    ]
     template_name = "catalog/task_form.html"
     success_url = reverse_lazy("catalog:tasks")
 
