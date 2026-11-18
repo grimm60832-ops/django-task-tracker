@@ -2,9 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as AuthLogoutView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -258,18 +258,15 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class TaskCommentDeleteView(LoginRequiredMixin, DeleteView):
-    model = TaskComment
-
-    def get_success_url(self):
-        return reverse_lazy("catalog:task-detail", kwargs={"pk": self.object.task.pk})
-
-    def dispatch(self, request, *args, **kwargs):
-        comment = self.get_object()
+class TaskCommentDeleteView(LoginRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        comment = get_object_or_404(TaskComment, pk=pk)
         if comment.author != request.user and not request.user.is_staff:
             messages.error(request, "You can only delete your own comments.")
-            return redirect("catalog:task-detail", pk=comment.task.pk)
-        return super().dispatch(request, *args, **kwargs)
+        else:
+            comment.delete()
+            messages.success(request, "Comment successfully deleted.")
+        return redirect("catalog:task-detail", pk=comment.task.pk)
 
 
 class RegistrationView(generic.CreateView):
