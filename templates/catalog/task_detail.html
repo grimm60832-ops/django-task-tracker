@@ -30,6 +30,24 @@
     {% endfor %}
   </p>
 
+  <div class="mb-3">
+  <strong>Change Status:</strong>
+    <form method="post" class="d-inline-block ml-2">
+      {% csrf_token %}
+      <input type="hidden" name="new_status" value="todo">
+      <button type="submit" class="btn btn-sm {% if task.status == 'todo' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">To Do</button>
+    </form>
+    <form method="post" class="d-inline-block ml-1">
+      {% csrf_token %}
+      <input type="hidden" name="new_status" value="in_progress">
+      <button type="submit" class="btn btn-sm {% if task.status == 'in_progress' %}btn-warning{% else %}btn-outline-warning{% endif %}">In Progress</button>
+    </form>
+    <form method="post" class="d-inline-block ml-1">
+      {% csrf_token %}
+      <input type="hidden" name="new_status" value="done">
+      <button type="submit" class="btn btn-sm {% if task.status == 'done' %}btn-success{% else %}btn-outline-success{% endif %}">Done</button>
+    </form>
+  </div>
   <div class="mt-3">
     <a href="{% url 'catalog:task-update' task.pk %}" class="btn btn-outline-dark btn-sm">Edit</a>
     <a href="{% url 'catalog:task-delete' task.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
