@@ -20,8 +20,10 @@
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <a href="{% url 'catalog:project-detail' project.pk %}">{{ project.name }}</a>
       <div>
-        <a href="{% url 'catalog:project-update' project.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-        <a href="{% url 'catalog:project-delete' project.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        {% if project.author == request.user or request.user.is_staff %}
+          <a href="{% url 'catalog:project-update' project.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'catalog:project-delete' project.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        {% endif %}
       </div>
     </li>
   {% empty %}

@@ -51,8 +51,10 @@
         {% endif %}
       </div>
       <div>
-        <a href="{% url 'catalog:task-update' task.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-        <a href="{% url 'catalog:task-delete' task.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        {% if task.creator == request.user or request.user.is_staff %}
+          <a href="{% url 'catalog:task-update' task.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'catalog:task-delete' task.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        {% endif %}
       </div>
     </li>
   {% empty %}
