@@ -18,6 +18,7 @@
 
   <p><strong>Priority:</strong> <span class="badge badge-info">{{ task.get_priority_display }}</span></p>
   <p><strong>Project:</strong> {{ task.project.name }}</p>
+  <p><strong>Creator:</strong> {{ task.creator }}</p>
 
   {% if task.deadline %}
     <p><strong>Deadline:</strong> {{ task.deadline }}</p>
